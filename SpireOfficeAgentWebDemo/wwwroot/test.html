@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spire.Agent.Office AI Processing</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            padding: 30px 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .header h1 { font-size: 28px; font-weight: 700; }
+        .header p { color: #666; margin-top: 6px; font-size: 15px; }
+        .header .badge {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #0078d4;
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(580px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+
+        .product-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .card-excel .product-header { background: linear-gradient(135deg, #a8e6b8, #c8f0d0); }
+        .card-word  .product-header { background: linear-gradient(135deg, #a8c8f0, #c8ddf5); }
+        .card-pdf   .product-header { background: linear-gradient(135deg, #f0b8b8, #f5d0d0); }
+        .card-ppt   .product-header { background: linear-gradient(135deg, #f5d0b8, #fae0d0); }
+
+        .card-body { padding: 16px 20px 20px; }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 4px;
+        }
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: #fafafa;
+        }
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #0078d4;
+            outline: none;
+            background: #fff;
+        }
+        .form-group textarea {
+            height: 68px;
+            resize: vertical;
+        }
+        .form-group textarea.example {
+            color: #aaa;
+        }
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+        .form-row .form-group { flex: 1; }
+
+        .btn {
+            width: 100%;
+            padding: 9px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #0078d4;
+            color: #fff;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn:hover:not(:disabled) { background: #106ebe; }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: none;
+            word-break: break-all;
+        }
+        .status.show { display: block; }
+        .status.success { background: #dff6dd; border: 1px solid #7fba7f; color: #1a5e1a; }
+        .status.error   { background: #fde7e9; border: 1px solid #e37a7a; color: #8a1a1a; }
+        .status.info    { background: #e8f4fd; border: 1px solid #8fc8f0; color: #1a4e7a; }
+
+        @media (max-width: 520px) {
+            .product-grid { grid-template-columns: 1fr; }
+            .form-row { flex-direction: column; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Spire.Agent.Office AI Processing</h1>
+            <p>Set SpireToken Key → Choose Output Format → Enter Instruction → Click Process</p>
+        </div>
+        <div style="max-width:700px; margin:0 auto 20px;">
+            <label style="font-size:13px; font-weight:600; color:#555;">SpireToken Key</label>
+            <div style="display:flex; gap:8px;">
+                <input type="text" id="apiKey" placeholder="sk-xxxxxxxxxxxx"
+                       style="flex:1; padding:8px 12px; border:1px solid #d0d0d0; border-radius:6px; font-size:14px; box-sizing:border-box;">
+                <button id="saveKeyBtn" style="padding:8px 16px; border:none; border-radius:6px; background:#0078d4; color:#fff; font-weight:600; cursor:pointer; white-space:nowrap;">Save</button>
+            </div>
+            <div id="keyStatus" style="font-size:12px; color:#888; margin-top:4px;"></div>
+        </div>
+        <div class="product-grid" id="app"></div>
+
+        <div style="max-width:700px; margin:20px auto; padding-top:20px; border-top:1px solid #ddd;">
+            <div style="font-size:18px; color:#888; line-height:1.6;">
+                If valid token key not detected. Please obtain a trial or commercial token key via:<br>
+                Email: <a href="mailto:sales@e-iceblue.com" style="color:#0078d4;">sales@e-iceblue.com</a><br>
+                Visit the official licensing page: <a href="https://www.e-iceblue.com/TemLicense.html" target="_blank" style="color:#0078d4;">https://www.e-iceblue.com/TemLicense.html</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PRODUCTS = [
+            {
+                id: 'word',
+                name: 'Word',
+                endpoint: '/api/AIAgent/executeDoc',
+                presetFile: 'Data/Sample.docx',
+                defaultInstruction: "Find 'Spire.Agent.Office' and highlight it",
+                defaultSaveFormat: 'pdf',
+                formats: ['pdf', 'docx', 'doc', 'rtf', 'html', 'txt', 'odt', 'epub', 'xml', 'md']
+            },
+            {
+                id: 'pdf',
+                name: 'PDF',
+                endpoint: '/api/AIAgent/executePdf',
+                presetFile: 'Data/Sample.pdf',
+                defaultInstruction: 'Extract table data',
+                defaultSaveFormat: 'txt',
+                formats: ['pdf', 'html', 'txt', 'xps', 'docx', 'xml']
+            },
+            {
+                id: 'excel',
+                name: 'Excel',
+                endpoint: '/api/AIAgent/executeXls',
+                presetFile: 'Data/Sample.xlsx',
+                defaultInstruction: 'Remove empty lines and sort in ascending order based on Sales_Volume data',
+                defaultSaveFormat: 'xlsx',
+                formats: ['pdf', 'xlsx', 'xls', 'csv', 'html', 'ods', 'xml', 'json', 'md']
+            },
+            {
+                id: 'ppt',
+                name: 'PowerPoint',
+                endpoint: '/api/AIAgent/executePpt',
+                presetFile: 'Data/Sample.pptx',
+                defaultInstruction: 'Convert all slides to pdf format',
+                defaultSaveFormat: 'pdf',
+                formats: ['pdf', 'pptx', 'ppt', 'html', 'tiff', 'png', 'odp', 'xml']
+            }
+        ];
+
+        const FORMAT_LABELS = {
+            pdf: 'PDF', xlsx: 'XLSX', xls: 'XLS', csv: 'CSV',
+            docx: 'DOCX', doc: 'DOC', pptx: 'PPTX', ppt: 'PPT',
+            html: 'HTML', rtf: 'RTF', txt: 'TXT', md: 'Markdown',
+            xml: 'XML', json: 'JSON', ods: 'ODS', odt: 'ODT', odp: 'ODP',
+            epub: 'EPUB', xps: 'XPS', tiff: 'TIFF', png: 'PNG'
+        };
+
+        const app = document.getElementById('app');
+
+        function renderProduct(p) {
+            const formatOptions = p.formats.map(f =>
+                `<option value="${f}"${f === p.defaultSaveFormat ? ' selected' : ''}>${FORMAT_LABELS[f] || f.toUpperCase()}</option>`
+            ).join('');
+
+            const card = document.createElement('div');
+            card.className = `product-card card-${p.id}`;
+            card.innerHTML = `
+                <div class="product-header">
+                    <span>${p.name}</span>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Instruction</label>
+                        <textarea id="instr-${p.id}" class="example">${p.defaultInstruction}</textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Output Format</label>
+                            <select id="fmt-${p.id}">${formatOptions}</select>
+                        </div>
+                        <div class="form-group">
+                            <label>Preset File</label>
+                            <div style="padding:8px 12px; background:#f5f5f5; border-radius:6px; font-size:13px; color:#666;">
+                                ${p.presetFile}
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn" id="btn-${p.id}">Process</button>
+                    <div class="status" id="status-${p.id}"></div>
+                </div>
+            `;
+            app.appendChild(card);
+
+            const instrEl = card.querySelector(`#instr-${p.id}`);
+            const fmtEl   = card.querySelector(`#fmt-${p.id}`);
+            const btn     = card.querySelector(`#btn-${p.id}`);
+            const status  = card.querySelector(`#status-${p.id}`);
+
+            // Clear example text on focus
+            instrEl.addEventListener('focus', function() {
+                if (this.classList.contains('example')) {
+                    this.value = '';
+                    this.classList.remove('example');
+                }
+            });
+            // Restore example if left empty
+            instrEl.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.value = p.defaultInstruction;
+                    this.classList.add('example');
+                }
+            });
+
+            btn.addEventListener('click', () => process(p, instrEl, fmtEl, btn, status));
+        }
+
+        async function process(product, instrEl, fmtEl, btn, statusEl) {
+            // Use preset instruction if user hasn't typed their own
+            const usePreset = instrEl.classList.contains('example');
+            const instruction = usePreset ? product.defaultInstruction : instrEl.value.trim();
+            // Output format: always use dropdown value (defaults to the selected option)
+            const saveFormat = fmtEl.value;
+            // Get optional SpireToken key from input
+            const apiKey = document.getElementById('apiKey').value.trim() || null;
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+            showStatus(statusEl, 'AI processing...', 'info');
+
+            try {
+                const body = { instruction, saveFormat };
+                if (apiKey) body.apiKey = apiKey;
+
+                const res = await fetch(product.endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                if (!res.ok) {
+                    const errText = await res.text();
+                    let msg = errText;
+                    try {
+                        const errJson = JSON.parse(errText);
+                        msg = errJson.error || errJson.title || errText;
+                    } catch {}
+                    throw new Error(msg);
+                }
+
+                const blob = await res.blob();
+                const fileName = `${product.id}_result_${now()}.${saveFormat}`;
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                URL.revokeObjectURL(url);
+                showStatus(statusEl, `Downloaded: ${fileName} (${formatSize(blob.size)})`, 'success');
+            } catch (err) {
+                showStatus(statusEl, `Error: ${err.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Process';
+            }
+        }
+
+        function showStatus(el, msg, type) {
+            el.className = `status show ${type}`;
+            el.textContent = msg;
+        }
+
+        function now() {
+            const d = new Date();
+            return d.getFullYear()
+                + String(d.getMonth()+1).padStart(2,'0')
+                + String(d.getDate()).padStart(2,'0')
+                + String(d.getHours()).padStart(2,'0')
+                + String(d.getMinutes()).padStart(2,'0')
+                + String(d.getSeconds()).padStart(2,'0');
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        PRODUCTS.forEach(renderProduct);
+
+        // --- SpireToken Key management ---
+        const keyInput = document.getElementById('apiKey');
+        const saveBtn = document.getElementById('saveKeyBtn');
+        const keyStatus = document.getElementById('keyStatus');
+
+        // On page load, check if a key is already configured
+        fetch('/api/AIAgent/key-status')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.configured) {
+                    keyStatus.textContent = '⚠ No SpireToken Key configured — enter one and click Save';
+                }
+            })
+            .catch(() => {
+                keyStatus.textContent = '⚠ Unable to check key status';
+            });
+
+        // Save key button
+        saveBtn.addEventListener('click', async () => {
+            const apiKey = keyInput.value.trim();
+            if (!apiKey) {
+                keyStatus.textContent = '⚠ Please enter a SpireToken Key';
+                return;
+            }
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+            try {
+                const res = await fetch('/api/AIAgent/save-key', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ apiKey })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    keyStatus.textContent = '✓ SpireToken Key saved to server';
+                } else {
+                    keyStatus.textContent = '✗ ' + (data.error || 'Save failed');
+                }
+            } catch (err) {
+                keyStatus.textContent = '✗ Save failed: ' + err.message;
+            } finally {
+                saveBtn.textContent = 'Save';
+                saveBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

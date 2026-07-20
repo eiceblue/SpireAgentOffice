@@ -1,0 +1,165 @@
+@SpireAgentOffice_HostAddress = http://localhost:5184
+
+### Health check
+GET {{SpireAgentOffice_HostAddress}}/api/AIAgent/health
+Accept: application/json
+
+### ============================================
+### Excel document processing (preset Sample.xlsx)
+### ============================================
+
+### Excel - Generate PDF
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executeXls
+Content-Type: application/json
+
+{
+    "instruction": "Convert sheet 1 to pdf",
+    "saveFormat": "pdf"
+}
+
+### Excel - Generate XLSX
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executeXls
+Content-Type: application/json
+
+{
+    "instruction": "Generate corresponding charts in sheet1 based on current data",
+    "saveFormat": "xlsx"
+}
+
+### Excel - Generate CSV
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executeXls
+Content-Type: application/json
+
+{
+    "instruction": "Export data from sheet1 to csv format",
+    "saveFormat": "csv"
+}
+
+### Excel - Generate and return download URL
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executeXls-and-return-url
+Content-Type: application/json
+
+{
+    "instruction": "Convert sheet 1 to pdf",
+    "saveFormat": "pdf"
+}
+
+### ============================================
+### Word document processing (preset Sample.docx)
+### ============================================
+
+### Word - Generate PDF
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executeDoc
+Content-Type: application/json
+
+{
+    "instruction": "Convert document to pdf format",
+    "saveFormat": "pdf"
+}
+
+### Word - Generate DOCX
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executeDoc
+Content-Type: application/json
+
+{
+    "instruction": "Add a summary paragraph about AI development at the end of the document",
+    "saveFormat": "docx"
+}
+
+### Word - Generate RTF
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executeDoc
+Content-Type: application/json
+
+{
+    "instruction": "Convert document to rtf format",
+    "saveFormat": "rtf"
+}
+
+### Word - Generate and return download URL
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executeDoc-and-return-url
+Content-Type: application/json
+
+{
+    "instruction": "Convert document to pdf format",
+    "saveFormat": "pdf"
+}
+
+### ============================================
+### PDF document processing (preset Sample.pdf)
+### ============================================
+
+### PDF - Generate PDF
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executePdf
+Content-Type: application/json
+
+{
+    "instruction": "Extract key information from the document and generate a summary",
+    "saveFormat": "pdf"
+}
+
+### PDF - Generate HTML
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executePdf
+Content-Type: application/json
+
+{
+    "instruction": "Convert document to html format",
+    "saveFormat": "html"
+}
+
+### PDF - Generate TXT
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executePdf
+Content-Type: application/json
+
+{
+    "instruction": "Extract all text content from the document",
+    "saveFormat": "txt"
+}
+
+### PDF - Generate and return download URL
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executePdf-and-return-url
+Content-Type: application/json
+
+{
+    "instruction": "Extract key information from the document",
+    "saveFormat": "pdf"
+}
+
+### ============================================
+### PowerPoint document processing (preset Sample.pptx)
+### ============================================
+
+### PPT - Generate PDF
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executePpt
+Content-Type: application/json
+
+{
+    "instruction": "Convert all slides to pdf format",
+    "saveFormat": "pdf"
+}
+
+### PPT - Generate PPTX
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executePpt
+Content-Type: application/json
+
+{
+    "instruction": "Add a summary slide after the last slide",
+    "saveFormat": "pptx"
+}
+
+### PPT - Generate HTML
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executePpt
+Content-Type: application/json
+
+{
+    "instruction": "Convert presentation to html format",
+    "saveFormat": "html"
+}
+
+### PPT - Generate and return download URL
+POST {{SpireAgentOffice_HostAddress}}/api/AIAgent/executePpt-and-return-url
+Content-Type: application/json
+
+{
+    "instruction": "Convert all slides to pdf",
+    "saveFormat": "pdf"
+}

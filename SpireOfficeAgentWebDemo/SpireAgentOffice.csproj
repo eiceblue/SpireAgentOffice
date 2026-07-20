@@ -1,0 +1,88 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<NoWarn>NU1510</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Core / Runtime -->
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.116.1" />
+    <PackageReference Include="Spire.Docfor.NETStandard" Version="14.6.13" />
+    <PackageReference Include="Spire.PDFfor.NETStandard" Version="12.6.9" />
+    <PackageReference Include="Spire.Presentationfor.NETStandard" Version="11.6.11" />
+    <PackageReference Include="Spire.XLSfor.NETStandard" Version="16.6.3" />
+
+    <!-- Serialization / Encoding -->
+    <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.0" />
+    <PackageReference Include="System.Text.Json" Version="10.0.0" />
+
+    <!-- Graphics / Rendering -->
+    <PackageReference Include="HarfBuzzSharp" Version="8.3.0.1" />
+    <PackageReference Include="SkiaSharp" Version="3.116.1" />
+
+    <!-- Logging (Serilog) -->
+    <PackageReference Include="Serilog" Version="4.2.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+
+    <!-- Data / Database -->
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
+
+    <!-- ML / AI -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.17.3" />
+
+    <!-- Resilience / Polly -->
+    <PackageReference Include="Polly" Version="8.5.0" />
+    <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
+
+    <!-- Roslyn / Scripting -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.5.0" />
+
+    <!-- .NET Interactive -->
+    <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.23403.1" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.23403.1" />
+
+    <!-- Web / OpenAPI -->
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Spire.Agent.Office">
+      <HintPath>lib\Spire.Agent.Office.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Agent.Office.Abstractions">
+      <HintPath>lib\Spire.Agent.Office.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Agent.Office.AutoFix">
+      <HintPath>lib\Spire.Agent.Office.AutoFix.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Agent.Office.Core">
+      <HintPath>lib\Spire.Agent.Office.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Agent.Office.Utils">
+      <HintPath>lib\Spire.Agent.Office.Utils.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
