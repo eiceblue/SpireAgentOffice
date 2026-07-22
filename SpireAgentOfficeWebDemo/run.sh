@@ -1,7 +1,7 @@
 #!/bin/bash
 # SpireAgentOffice Launcher
 if ! command -v dotnet &> /dev/null; then
-    echo "[ERROR] .NET SDK not found. Install from https://dotnet.microsoft.com/download"
+    echo "[ERROR] .NET SDK not found. Install from https://dotnet.microsoft.com/download ."
     exit 1
 fi
 
